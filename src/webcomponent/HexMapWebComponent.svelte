@@ -23,7 +23,9 @@
     customViewbox = null,
     onClick = () => {},
     onHover = () => {},
+    onFocus = () => {},
     onApi = () => {},
+    onViewboxChange = () => {},
     isStaticLayout = true,
     isInteractive = true
   } = $props();
@@ -35,8 +37,8 @@
   /**
    * Get a screen coordinate from the given SVG coordinate
    */
-  function svgToScreenCoord(x, y, svg) {
-    const matrix = svg.getScreenCTM(); // Get the transformation matrix
+  function svgToScreenCoord(x, y, svg, screen = true) {
+    const matrix = screen ? svg.getScreenCTM() : svg.getCTM(); // Get the transformation matrix
     const point = svg.createSVGPoint();
     point.x = x;
     point.y = y;
@@ -66,9 +68,11 @@
     const svgY = Number(hex.coordPx[1] + offsetY);
 
     const [screenX, screenY] = svgToScreenCoord(svgX, svgY, svg);
+    const [containerX, containerY] = svgToScreenCoord(svgX, svgY, svg, false);
     return {
       code: id,
       screenCoord: [screenX, screenY],
+      containerCoord: [containerX, containerY],
       svgCoord: [svgX, svgY]
     };
   }
@@ -81,7 +85,7 @@
   });
 </script>
 
-<StyleRoot bind:this={rootEl}>
+<StyleRoot bind:rootEl={rootEl}>
   <HexMap
     {config}
     layout={layoutDefinition}
@@ -92,9 +96,11 @@
     {showElectorateLabels}
     {onClick}
     {onHover}
+    {onFocus}
     {selectedElectorate}
     {customViewbox}
     {isStaticLayout}
     {isInteractive}
+    {onViewboxChange}
   />
 </StyleRoot>

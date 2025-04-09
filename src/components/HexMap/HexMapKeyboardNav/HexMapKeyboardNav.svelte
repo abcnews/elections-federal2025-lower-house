@@ -1,9 +1,14 @@
 <script lang="ts">
   import AccessibleHide from '../../AccessibleHide/AccesibleHide.svelte';
-  let { groups, layout, onChange, onClick } = $props();
+  let { groups, layout, onChange, onClick, onFocus } = $props();
   let focused = $state(null);
-  function onFocus(e) {
-    focused = e.target.dataset.id;
+  function onFocusProxy(e) {
+    const id = e.target.dataset.id;
+    focused = id
+
+    onFocus?.({
+      code: id
+    })
   }
   function onClickProxy(e) {
     const id = e.target.dataset.id;
@@ -20,6 +25,8 @@
     if (focused === e.target.dataset.id) {
       focused = null;
     }
+
+    onFocus?.({code: null})
   }
   $effect(() => {
     onChange?.(focused);
@@ -39,7 +46,7 @@
 <AccessibleHide>
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-  <ul class="hexmapkeyboardnav" onclick={onClickProxy} onfocusin={onFocus} onfocusout={onBlur}>
+  <ul class="hexmapkeyboardnav" onclick={onClickProxy} onfocusin={onFocusProxy} onfocusout={onBlur}>
     {#each sortedGroups as group}
       <li>
         {group.name}
