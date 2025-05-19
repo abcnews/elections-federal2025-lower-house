@@ -28,6 +28,7 @@
     onViewboxChange = () => {},
     isStaticLayout = true,
     isInteractive = true,
+    isSkippable = true,
     colours,
     customElectorateAltText = {},
     areStateOutlinesOnTop
@@ -96,7 +97,7 @@
   });
 </script>
 
-<StyleRoot {colours} />
+<StyleRoot {colours} bind:rootEl={rootEl} />
 <div bind:this={rootEl}>
   <HexMap
     {config}
@@ -113,6 +114,7 @@
     {customViewbox}
     {isStaticLayout}
     {isInteractive}
+    {isSkippable}
     {onViewboxChange}
     {customElectorateAltText}
     showStateOutlinesOnTop={areStateOutlinesOnTop}

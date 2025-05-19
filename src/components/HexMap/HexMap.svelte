@@ -240,6 +240,7 @@
       }}
       {onClick}
       {onFocus}
+      {isSkippable}
     />
   {/if}
 </div>
